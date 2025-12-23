@@ -1,7 +1,11 @@
 # ROBOT_DATASET
-<<<<<<< HEAD
-https://gemini.google.com/app
+真神：https://gemini.google.com/app
 
+## 效果：
+### 数据收集
+https://www.bilibili.com/video/BV1ZXBTBCEEs/?vd_source=21305f4d66e9c0e234a3094ab6e4e0e6
+### openpi05
+https://www.bilibili.com/video/BV1vzBMBGEzu/?vd_source=21305f4d66e9c0e234a3094ab6e4e0e6
 松灵机械臂遥操作数据采集与openpi微调
 
 运行robot_dataset.py按键控制数据记录：
