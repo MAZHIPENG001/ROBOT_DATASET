@@ -521,12 +521,12 @@ uv run scripts/serve_policy.py policy:checkpoint --policy.config=piper_libero --
 ```
 
 ## 运行顺序建议：
-### 1.openpi仿真：服务器推理保存视频(/scripts/inference_local.py)
-### 2.openpi仿真：本地发送数据->服务器计算->数据返回本地执行动作(/scripts/client_policy.py)
-### 3.数据收集：注释硬件设备，使用ld.keeping_record()生成随机数保存
-### 4.归一化计算：/processer/compute_norm_stats.py
-### 5.模型训练
-### 6.实际使用
+#### 1.openpi仿真：服务器推理保存视频(/scripts/inference_local.py)
+#### 2.openpi仿真：本地发送数据->服务器计算->数据返回本地执行动作(/scripts/client_policy.py)
+#### 3.数据收集：注释硬件设备，使用ld.keeping_record()生成随机数保存
+#### 4.归一化计算：/processer/compute_norm_stats.py
+#### 5.模型训练
+#### 6.实际使用
 
 
 
