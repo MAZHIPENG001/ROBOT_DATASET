@@ -1,6 +1,11 @@
 # ROBOT_DATASET
-<<<<<<< HEAD
-https://gemini.google.com/app
+真神：https://gemini.google.com/app
+
+## 效果：
+### 数据收集
+https://www.bilibili.com/video/BV1ZXBTBCEEs/?vd_source=21305f4d66e9c0e234a3094ab6e4e0e6
+### openpi05
+https://www.bilibili.com/video/BV1vzBMBGEzu/?vd_source=21305f4d66e9c0e234a3094ab6e4e0e6
 
 松灵机械臂遥操作数据采集与openpi微调
 
@@ -11,6 +16,7 @@ s:保存当前数据;
 q:退出程序;
 Backspace:删除当前缓存数据
 ```
+
 ## Github仓库
 ```bash
 cd ~
@@ -36,7 +42,8 @@ timestamps = torch.stack(list(self.hf_dataset["timestamp"])).numpy()
 # episode_indices = torch.stack(self.hf_dataset["episode_index"]).numpy()
 episode_indices = torch.stack(list(self.hf_dataset["episode_index"])).numpy()
 ```
-### 环境创建：参考：https://github.com/Physical-Intelligence/openpi
+### 环境创建：
+参考：https://github.com/Physical-Intelligence/openpi
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 cd ~/GithubDoc/openpi
@@ -509,12 +516,17 @@ ssh -CNg -L 8000:127.0.0.1:8000 root@connect.westb.seetacloud.com -p 40053
 /home/mzp/ROBOT_DATASET/client_policy_piper.py
 ```
 ```bash
-# 服务器端 checkpoint:2000：
+# 服务器端 checkpoint:20000：
 uv run scripts/serve_policy.py policy:checkpoint --policy.config=piper_libero --policy.dir=checkpoints/piper_libero/my_experiment/20000
 ```
 
-
-
+## 运行顺序建议：
+### 1.openpi仿真：服务器推理保存视频(/scripts/inference_local.py)
+### 2.openpi仿真：本地发送数据->服务器计算->数据返回本地执行动作(/scripts/client_policy.py)
+### 3.数据收集：注释硬件设备，使用ld.keeping_record()生成随机数保存
+### 4.归一化计算：/processer/compute_norm_stats.py
+### 5.模型训练
+### 6.实际使用
 
 
 
