@@ -17,6 +17,9 @@ q:退出程序;
 Backspace:删除当前缓存数据
 ```
 
+增加双臂训练部分（数据采集遥操作未完成，需根据硬件设置），文件不解释（与单臂类似），使用方法见文末
+
+# 单臂
 ## Github仓库
 ```bash
 cd ~
@@ -178,7 +181,7 @@ class PromptFromLeRobotTask(DataTransformFn):
 修改/openpi/scripts/train.py23行
 
 ```
-# openpi/scr相对于openpi修改配置文件（也可以合并）
+# openpi/src相对于openpi修改配置文件（也可以合并）
 # import openpi.training.config as _config
 import openpi.training.dataset_config as _config
 ```
@@ -528,7 +531,11 @@ uv run scripts/serve_policy.py policy:checkpoint --policy.config=piper_libero --
 #### 5.模型训练
 #### 6.实际使用
 
-
+# 双臂
+将./processer/libero_policy.py的未注释的LiberoOutputs和LiberoInputs注释，并将已注释的取消注释
+```bash
+XLA_PYTHON_CLIENT_MEM_FRACTION=0.9 uv run scripts/train.py piper_dual --exp-name=my_experiment --overwrite
+```
 
 
 =======
