@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="230969eb-2a23-4bf7-a106-86d37cc358fb" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/_2026_3_24_16_01____.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_2026_3_24_16_01_取消提交了更改_[更改]/shelved.patch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit/lerobot_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/unit/lerobot_data.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,7 +209,7 @@
       <workItem from="1773385235311" duration="25000" />
       <workItem from="1774335259032" duration="473000" />
       <workItem from="1774335915782" duration="1876000" />
-      <workItem from="1774337970305" duration="1055000" />
+      <workItem from="1774337970305" duration="3382000" />
     </task>
     <servers />
   </component>

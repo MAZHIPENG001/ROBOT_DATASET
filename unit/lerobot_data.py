@@ -195,3 +195,55 @@ class lerobotdata_dual():
             "language_instruction": language_instruction,  # 任务指令的字节串
         }
         return step
+
+if __name__ == "__main__":
+    import time
+    import click
+    import sys
+    sys.path.append('/home/mzp/ROBOT_DATASET')
+    from device.keyboard import KeystrokeCounter,KeyCode,Key
+
+    ld=lerobotdata_dual(resume=False)
+    print(f'\33[93m{ld.dataset}\33[0m')
+
+    stop = False
+    is_recording = False
+    with KeystrokeCounter() as key_counter:
+        while not stop:
+            # 缓存数据
+            if is_recording:
+                ld.keeping_record()
+            # 按键判断
+            press_events = key_counter.get_press_events()
+            # Q: 退出程序
+            # C: 开始录制
+            # S: 保存当前数据
+            # num: order
+            # Backspace: 删除最近录制的episode
+            for key_stroke in press_events:
+                if key_stroke == KeyCode(char='q'):
+                    # Exit program
+                    print(f'\33[91mExit program!\33[0m')
+                    stop = True
+                elif key_stroke == KeyCode(char='c'):
+                    print(f'\33[92mStart Recording!\33[0m')
+                    key_counter.clear()
+                    is_recording = True
+                elif key_stroke == KeyCode(char='s'):
+                    # Stop recording
+                    key_counter.clear()
+                    is_recording = False
+                    ld.save_record()
+                    print(ld.dataset)
+                    print(f'\33[91mStopped.\33[0m')
+
+                elif key_stroke == Key.backspace:
+                    # Delete the most recent recorded episode
+                    is_recording = False
+                    if click.confirm('Are you sure to drop an episode?'):
+                        key_counter.clear()
+                        ld.del_record()
+                        prev_actions = None
+                        idx = 0
+
+            time.sleep(0.1)
