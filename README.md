@@ -94,6 +94,7 @@ bash can_activate.sh can1 1000000 "1-1.3:1.0"
 ld = lerobotdata(resume=True)
 # 创建新数据集
 ld = lerobotdata(resume=False)
+# 创建数据集前修改unit/lerobot_data.py:self.REPO_ID="替换为你的仓库名/替换为你的数据集名"
 ```
 2.上传到huggingface，对网络有要求，采集完数据后取消注释再次运行代码可上传，可手动在网页端上传
 ```python
