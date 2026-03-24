@@ -28,11 +28,6 @@ git clone https://github.com/huggingface/lerobot.git
 cd lerobot
 git checkout
 git switch origin/user/azouitine/2025-04-24-hot-fix-ci
-
-<修改：origin/user/azouitine/2025-04-24-hot-fix-ci分支被删掉了，
-下载一个早期版本的（时间在2025.4.24左右，确保lerobot数据集目录~/.cache/huggingface/lerobot/***/****/meta/info.json中的"codebase_version": "v2.1",）
-or试一下我当时下载的：我用夸克网盘分享了「lerobot.zip」，点击链接即可保存。打开「夸克APP」，无需下载在线播放视频，畅享原画5倍速，支持电视投屏。
-链接：https://pan.quark.cn/s/dd6ea5047eb9
 ```
 修改(如需要)
 ```python
