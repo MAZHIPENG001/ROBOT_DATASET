@@ -28,6 +28,8 @@ git clone https://github.com/huggingface/lerobot.git
 cd lerobot
 git checkout
 git switch origin/user/azouitine/2025-04-24-hot-fix-ci
+<修改：origin/user/azouitine/2025-04-24-hot-fix-ci分支被删掉了，
+下载一个早期版本的（时间在2025.4.24左右，确保lerobot数据集目录/meta/info.json中的"codebase_version": "v2.1",）or试一下我当时下载的：<夸克网盘>>
 ```
 修改(如需要)
 ```python
