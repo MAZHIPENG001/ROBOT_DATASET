@@ -2,10 +2,9 @@ import pyrealsense2 as rs
 import numpy as np
 import cv2
 from processer.transfer import transform_matrix
-from device.keyboard import KeystrokeCounter,KeyCode,Key
 
 class RealSenseCamera:
-    def __init__(self, width=640, height=480, fps=30,serial_number=None):
+    def __init__(self, width=640, height=480, fps=30, serial_number=None):
         """
         初始化RealSense相机
         参数:
@@ -23,6 +22,8 @@ class RealSenseCamera:
         # 如果有指定序列号，则只连接该设备
         if serial_number:
             self.config.enable_device(serial_number)
+        else:
+            self.serial_number = rs.camera_info.serial_number
         # 配置流
         self.config.enable_stream(rs.stream.depth, width, height, rs.format.z16, fps)
         self.config.enable_stream(rs.stream.color, width, height, rs.format.bgr8, fps)
@@ -54,7 +55,7 @@ class RealSenseCamera:
         """启动相机"""
         try:
             # self.profile = self.pipeline.start(self.config)
-            print(f"\033[92m相机启动成功\033[0m")
+            print(f"\033[92m相机serial_number=={self.serial_number}   启动成功\033[0m")
 
             # 获取深度传感器和深度标尺
             depth_sensor = self.profile.get_device().first_depth_sensor()
@@ -211,7 +212,7 @@ class RealSenseCamera:
         d_fy = self.depth_intrinsics.fy
         d_cx = self.depth_intrinsics.ppx
         d_cy = self.depth_intrinsics.ppy
-        print(f'\033[96m彩图内参深度图内参:{d_fx}, {d_fy}, {d_cx}, {d_cy}')
+        print(f'\033[96m深度图内参:{d_fx}, {d_fy}, {d_cx}, {d_cy}')
         return d_fx, d_fy, d_cx, d_cy
 
     def display_images(self):
@@ -255,99 +256,89 @@ def list_camera_framerates(serial_number=None):
     """
     列出相机支持的分辨率和帧率组合
     """
+    def list_stream_profiles(device):
+        """
+        列出设备的流配置
+        """
+        # 获取所有传感器
+        sensors = device.query_sensors()
+
+        for sensor in sensors:
+            print(f"  \n传感器类型: {sensor.get_info(rs.camera_info.name)}")
+
+            # 获取传感器支持的所有流配置
+            stream_profiles = sensor.get_stream_profiles()
+
+            # 按流类型和分辨率分组
+            profiles_by_res = {}
+
+            for profile in stream_profiles:
+                # 将profile转换为视频流profile
+                if profile.is_video_stream_profile():
+                    vprofile = profile.as_video_stream_profile()
+
+                    # 获取流类型
+                    stream_type = str(vprofile.stream_type())
+
+                    # 获取分辨率
+                    width = vprofile.width()
+                    height = vprofile.height()
+                    res_key = f"{stream_type}_{width}x{height}"
+
+                    if res_key not in profiles_by_res:
+                        profiles_by_res[res_key] = []
+
+                    # 获取帧率
+                    fps = vprofile.fps()
+                    if fps not in profiles_by_res[res_key]:
+                        profiles_by_res[res_key].append(fps)
+
+            # 打印结果
+            for res_key, fps_list in profiles_by_res.items():
+                stream_type, resolution = res_key.split('_')
+                fps_list.sort()
+                print(f"    流类型: {stream_type:<15} 分辨率: {resolution:<10} 支持帧率: {fps_list}")
+
     ctx = rs.context()
 
-    # 获取设备
-    if serial_number:
-        devices = ctx.query_devices()
-        for dev in devices:
-            if dev.get_info(rs.camera_info.serial_number) == serial_number:
-                print(f"设备序列号: {serial_number}")
-                list_stream_profiles(dev)
-                break
-    else:
-        devices = ctx.query_devices()
-        for i, dev in enumerate(devices):
-            print(f"\n设备 {i + 1}:")
-            print(f"  名称: {dev.get_info(rs.camera_info.name)}")
-            print(f"  序列号: {dev.get_info(rs.camera_info.serial_number)}")
-            list_stream_profiles(dev)
+    devices = ctx.query_devices()
+    for i, dev in enumerate(devices):
+        print(f"\n\33[92m设备 {i + 1}:\33[0m")
+        print(f"  名称: {dev.get_info(rs.camera_info.name)}")
+        print(f"  序列号: {dev.get_info(rs.camera_info.serial_number)}")
+        list_stream_profiles(dev)
 
 
-def list_stream_profiles(device):
-    """
-    列出设备的流配置
-    """
-    # 获取所有传感器
-    sensors = device.query_sensors()
 
-    for sensor in sensors:
-        print(f"  \n传感器类型: {sensor.get_info(rs.camera_info.name)}")
-
-        # 获取传感器支持的所有流配置
-        stream_profiles = sensor.get_stream_profiles()
-
-        # 按流类型和分辨率分组
-        profiles_by_res = {}
-
-        for profile in stream_profiles:
-            # 将profile转换为视频流profile
-            if profile.is_video_stream_profile():
-                vprofile = profile.as_video_stream_profile()
-
-                # 获取流类型
-                stream_type = str(vprofile.stream_type())
-
-                # 获取分辨率
-                width = vprofile.width()
-                height = vprofile.height()
-                res_key = f"{stream_type}_{width}x{height}"
-
-                if res_key not in profiles_by_res:
-                    profiles_by_res[res_key] = []
-
-                # 获取帧率
-                fps = vprofile.fps()
-                if fps not in profiles_by_res[res_key]:
-                    profiles_by_res[res_key].append(fps)
-
-        # 打印结果
-        for res_key, fps_list in profiles_by_res.items():
-            stream_type, resolution = res_key.split('_')
-            fps_list.sort()
-            print(f"    流类型: {stream_type:<15} 分辨率: {resolution:<10} 支持帧率: {fps_list}")
 if __name__ == "__main__":
-    camera=RealSenseCamera(serial_number="233622070932")#135122074270
+    import time
     serial_number()
     list_camera_framerates()
-    savepath='./photo.jpg'
-    if camera.start():
-        fx,fy,cx,cy=camera.get_intrinsics()
-        # # 显示实时图像
-        # camera.display_images()
+    camera1 = RealSenseCamera(width=640, height=480)
+    # 加载相机
+    # camera1 = RealSenseCamera(width=1280, height=720, serial_number="233622070932")
+    # camera2 = RealSen6seCamera(width=640, height=480, serial_number="938422074612")
+    # while not camera2.start() and not camera1.start():
+    #     print(f"\33[93m等待相机启动...\33[0m")
+    #     time.sleep(0.2)  # 避免过度占用 CPU
     while True:
-        with KeystrokeCounter() as key_counter:
-            try:
-                while True:
-                    color_image, depth_image = camera.get_images()
-                    if color_image is None or depth_image is None:
-                        continue
-                    # 显示图像
-                    cv2.imshow('RealSense - Color', color_image)
-                    cv2.imshow('RealSense - Depth', depth_image)
-                    # 按'q'退出
-                    if cv2.waitKey(1) & 0xFF == ord('q'):
-                        break
-                    press_events = key_counter.get_press_events()
-                    for key_stroke in press_events:
-                        # 按下o：归零(关节控制)
-                        if key_stroke == KeyCode(char='s'):
-                            print("按下s：保存图片")
-                            camera.save_images(savepath)
-                        # 按下i: 复位(关节控制)
-                        elif key_stroke == Key.backspace:
-                            print("按下backspace:退出")
-                            exit()
-            except KeyboardInterrupt:
-                events = key_counter.get_press_events()
-                print(events)
+        color_image1, depth_image1 = camera1.get_images()
+        # color_image2, depth_image2 = camera2.get_images()
+
+        if color_image1 is None or depth_image1 is None:
+            continue
+
+        # 1. 将16位深度图映射到8位 (0-255)
+        # alpha 缩放因子：0.03 左右通常能让 0-3米 范围内的物体有较好的对比度
+        depth_display = cv2.convertScaleAbs(depth_image1, alpha=0.03)
+
+        # 2. 应用伪彩色（COLORMAP_JET 效果类似于常用的红色表示近，蓝色表示远）
+        # depth_colormap = cv2.applyColorMap(depth_display, cv2.COLORMAP_JET)
+        # 显示图像
+        cv2.imshow('RealSense - Color1', color_image1)
+        cv2.imshow('RealSense - Depth1', depth_display)
+        # cv2.imshow('RealSense - Color2', color_image2)
+
+        # 按'q'退出
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break

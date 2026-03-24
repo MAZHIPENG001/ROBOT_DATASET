@@ -1,7 +1,7 @@
 import time
 import click
 import cv2
-from unit.lerobot_data import lerobotdata
+from unit.lerobot_data import lerobotdata_dual
 from processer.libero_policy import _parse_image as parase_image
 from device.keyboard import KeystrokeCounter,KeyCode,Key
 from device.robot import robot_piper
@@ -29,12 +29,13 @@ def main():
     # can1使能
     piper_r = robot_piper('can1')
     piper_r.ConnectPort()
-    piper_r.EnableArm()
+    piper_r.disable_arm()
     # 加载相机
     camera1 = RealSenseCamera(width=640, height=480,serial_number="233622070932")
     camera2 = RealSenseCamera(width=640, height=480,serial_number="938422074612")
+    camera3 = RealSenseCamera(width=640, height=480, serial_number="************")
     # 定义数据集
-    ld = lerobotdata(resume=True)
+    ld = lerobotdata_dual(resume=True)
     # # 上传到huggingface
     # ld.dataset.push_to_hub(
     #     repo_id="mazhipeng/piper_dataset",  # 替换为你的仓库名
@@ -58,23 +59,37 @@ def main():
     with KeystrokeCounter() as key_counter:
         while not stop:
             # # 机械臂
-            joint_data = piper_l.read_joint()
-            joints = [getattr(joint_data.joint_state, f'joint_{i}') for i in range(1, 7)]
-            gripper_data=piper_l.read_gripper()
-            gripper=gripper_data.gripper_state.grippers_angle
-            actions = np.array(joints + [gripper], dtype=np.float32)
+            joint_data_l = piper_l.read_joint()
+            joint_data_r = piper_r.read_joint()
+            joints_l = [getattr(joint_data_l.joint_state, f'joint_{i}') for i in range(1, 7)]
+            joints_r = [getattr(joint_data_r.joint_state, f'joint_{i}') for i in range(1, 7)]
+
+            gripper_data_l = piper_l.read_gripper()
+            gripper_l = gripper_data_l.gripper_state.grippers_angle
+            gripper_data_r = piper_r.read_gripper()
+            gripper_r = gripper_data_r.gripper_state.grippers_angle
+
+            actions = np.array(joints_l + joints_r + [gripper_l] + [gripper_r], dtype=np.float32)
             if prev_actions is None:
                 state = actions.copy()  # 或np.zeros_like(current_actions)
             else:
                 state = prev_actions  # 使用上一时刻动作作为state
             prev_actions = actions.copy()
-            # 跟随
-            piper_r.move_a(*joints)
-            piper_r.gripper(gripper)
+            # # 跟随
+            '''
+            等待双臂遥操作设备--待完善
+            
+            # piper_l.move_a(*joints)
+            # piper_l.gripper(gripper)
+            # piper_r.move_a(*joints)
+            # piper_r.gripper(gripper)
+            '''
             # 相机
             image_head, _ = camera1.get_images()
-            image_wrist, _ = camera2.get_images()
-            color_image_combine=np.hstack((image_head, image_wrist))
+            image_wrist_left, _ = camera2.get_images()
+            image_wrist_right, _ = camera3.get_images()
+            color_image_combine=np.hstack((image_head, image_wrist_left,image_wrist_right))
+            # 显示
             cv2.putText(color_image_combine, f'is_recording:{is_recording}', (0, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             cv2.putText(color_image_combine, f'episodes:{ld.dataset.num_episodes}', (0, 70),
@@ -83,11 +98,13 @@ def main():
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             cv2.imshow('RealSense - Color', color_image_combine)
             cv2.waitKey(1)
+
             image_head = parase_image(image_head)
-            image_wrist = parase_image(image_wrist)
+            image_wrist_left = parase_image(image_wrist_left)
+            image_wrist_right = parase_image(image_wrist_right)
             # 缓存数据
             if is_recording:
-                ld.keep_record(image_head,image_wrist,state,actions,task)
+                ld.keep_record(image_head,image_wrist_left,image_wrist_right,state,actions,task)
                 # ld.keeping_record()
                 idx+=1
 

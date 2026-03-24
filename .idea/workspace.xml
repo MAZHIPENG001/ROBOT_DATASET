@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="230969eb-2a23-4bf7-a106-86d37cc358fb" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/dual_arm_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_policy_piper.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_policy_piper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/device/realsense_camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/device/realsense_camera.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/robot_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit/lerobot_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/unit/lerobot_data.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;MAZHIPENG001&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:MAZHIPENG001/ROBOT_DATASET.git&quot;,
+    &quot;accountId&quot;: &quot;9a526d30-fb27-4336-bd49-e8d52ace88e8&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="372rfrcWpJ5tVIAImfwGhzYevkx" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-sdk.has.been.configured.as.the.project.interpreter&quot;: &quot;&quot;,
+    &quot;Notification.DoNotAsk-sdk.has.been.configured.as.the.project.interpreter&quot;: &quot;true&quot;,
+    &quot;Python.asasas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.client_policy_piper.executor&quot;: &quot;Run&quot;,
+    &quot;Python.compute_norm_stats.executor&quot;: &quot;Run&quot;,
+    &quot;Python.data_loader.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataset_config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.datasetread.executor&quot;: &quot;Run&quot;,
+    &quot;Python.fixdataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.lerobot_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.realsense_camera.executor&quot;: &quot;Run&quot;,
+    &quot;Python.realsense_camera_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.robot_dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.transforms.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHELLCHECK.PATH&quot;: &quot;/home/mzp/.local/share/JetBrains/PyCharm2025.2/Shell Script/shellcheck&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/mzp/ROBOT_DATASET&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;uv 运行.robot_dataset.executor&quot;: &quot;Run&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/device" />
+      <recent name="$PROJECT_DIR$/processer" />
+      <recent name="$PROJECT_DIR$/unit" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="UvRunConfigurationType" factoryName="UvRunConfigurationType">
+      <option name="args">
+        <list />
+      </option>
+      <option name="checkSync" value="true" />
+      <option name="env">
+        <map />
+      </option>
+      <option name="runType" value="SCRIPT" />
+      <option name="scriptOrModule" value="" />
+      <option name="uvArgs">
+        <list />
+      </option>
+      <option name="uvSdkKey" value="uv (openpi) (3)" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.27397.106" />
+        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="230969eb-2a23-4bf7-a106-86d37cc358fb" name="更改" comment="" />
+      <created>1766112112364</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1766112112364</updated>
+      <workItem from="1766112113385" duration="7307000" />
+      <workItem from="1766123748351" duration="5654000" />
+      <workItem from="1766135066263" duration="711000" />
+      <workItem from="1766136289173" duration="3446000" />
+      <workItem from="1766142665309" duration="2576000" />
+      <workItem from="1766198252245" duration="2336000" />
+      <workItem from="1766208860810" duration="12561000" />
+      <workItem from="1766249537915" duration="3638000" />
+      <workItem from="1766286776042" duration="12998000" />
+      <workItem from="1766308514353" duration="5206000" />
+      <workItem from="1766314377510" duration="7519000" />
+      <workItem from="1766334689554" duration="789000" />
+      <workItem from="1766337735472" duration="60000" />
+      <workItem from="1766338828236" duration="34000" />
+      <workItem from="1766368292112" duration="6014000" />
+      <workItem from="1766380758293" duration="298000" />
+      <workItem from="1766381287915" duration="379000" />
+      <workItem from="1766382850907" duration="1000" />
+      <workItem from="1766383079400" duration="423000" />
+      <workItem from="1766386597672" duration="769000" />
+      <workItem from="1766388658523" duration="1681000" />
+      <workItem from="1766390819258" duration="3557000" />
+      <workItem from="1766395851329" duration="4555000" />
+      <workItem from="1766401235572" duration="3234000" />
+      <workItem from="1766408315645" duration="8270000" />
+      <workItem from="1766452125064" duration="2273000" />
+      <workItem from="1766456024255" duration="218000" />
+      <workItem from="1766469445136" duration="11775000" />
+      <workItem from="1766485392310" duration="3792000" />
+      <workItem from="1766497582613" duration="1086000" />
+      <workItem from="1766501718931" duration="65000" />
+      <workItem from="1766501838537" duration="32000" />
+      <workItem from="1766502243510" duration="803000" />
+      <workItem from="1766538786613" duration="642000" />
+      <workItem from="1766539452830" duration="2309000" />
+      <workItem from="1766543372423" duration="7542000" />
+      <workItem from="1766560970811" duration="1673000" />
+      <workItem from="1766565188821" duration="5673000" />
+      <workItem from="1766625354997" duration="2295000" />
+      <workItem from="1766642012332" duration="1985000" />
+      <workItem from="1766644347178" duration="5952000" />
+      <workItem from="1766655120506" duration="1454000" />
+      <workItem from="1766658363162" duration="36000" />
+      <workItem from="1766990288270" duration="2073000" />
+      <workItem from="1767057251926" duration="599000" />
+      <workItem from="1767078965436" duration="673000" />
+      <workItem from="1767084648689" duration="599000" />
+      <workItem from="1767601593202" duration="1018000" />
+      <workItem from="1767932990224" duration="601000" />
+      <workItem from="1768180492697" duration="3852000" />
+      <workItem from="1768196359008" duration="498000" />
+      <workItem from="1768203941609" duration="6000" />
+      <workItem from="1768205658612" duration="631000" />
+      <workItem from="1768207188411" duration="1000" />
+      <workItem from="1768208829267" duration="24000" />
+      <workItem from="1768208886168" duration="11000" />
+      <workItem from="1768270034810" duration="48000" />
+      <workItem from="1768271275712" duration="13000" />
+      <workItem from="1768375700523" duration="163000" />
+      <workItem from="1768465887156" duration="44000" />
+      <workItem from="1768467157700" duration="21000" />
+      <workItem from="1768468337977" duration="470000" />
+      <workItem from="1768469987045" duration="113000" />
+      <workItem from="1768789152260" duration="642000" />
+      <workItem from="1768871650932" duration="8000" />
+      <workItem from="1768883992098" duration="713000" />
+      <workItem from="1769446659154" duration="71000" />
+      <workItem from="1770024357094" duration="102000" />
+      <workItem from="1770708175996" duration="1372000" />
+      <workItem from="1772087012693" duration="184000" />
+      <workItem from="1772088452501" duration="490000" />
+      <workItem from="1773191527055" duration="1005000" />
+      <workItem from="1773385148171" duration="46000" />
+      <workItem from="1773385235311" duration="25000" />
+      <workItem from="1774335259032" duration="473000" />
+      <workItem from="1774335915782" duration="1876000" />
+      <workItem from="1774337970305" duration="564000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$data_loader.coverage" NAME="data_loader 覆盖结果" MODIFIED="1766252520296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../GithubDoc/openpi/src/openpi/training" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$fixdataset.coverage" NAME="fixdataset 覆盖结果" MODIFIED="1766381023820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$lerobot_data.coverage" NAME="lerobot_data 覆盖结果" MODIFIED="1766398098595" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$asasas.coverage" NAME="asasas 覆盖结果" MODIFIED="1768196714777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$compute_norm_stats.coverage" NAME="compute_norm_stats 覆盖结果" MODIFIED="1766414054016" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/processer" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$robot_dataset.coverage" NAME="robot_dataset 覆盖结果" MODIFIED="1768196491373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$realsense_camera.coverage" NAME="realsense_camera 覆盖结果" MODIFIED="1768789707372" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/device" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$test.coverage" NAME="test 覆盖结果" MODIFIED="1774336535968" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$dataset.coverage" NAME="dataset 覆盖结果" MODIFIED="1766209866970" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$client_policy_piper.coverage" NAME="client_policy_piper 覆盖结果" MODIFIED="1768183742145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$datasetread.coverage" NAME="datasetread 覆盖结果" MODIFIED="1766303938556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$dataset_config.coverage" NAME="dataset_config 覆盖结果" MODIFIED="1766301080420" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$transforms.coverage" NAME="transforms 覆盖结果" MODIFIED="1766394097086" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../GithubDoc/openpi/src/openpi" />
+    <SUITE FILE_PATH="coverage/ROBOT_DATASET$realsense_camera_data.coverage" NAME="realsense_camera_data 覆盖结果" MODIFIED="1766642444440" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/device" />
+  </component>
+</project>
