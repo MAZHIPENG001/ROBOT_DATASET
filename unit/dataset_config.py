@@ -316,6 +316,128 @@ class LeRobotLiberoDataConfig(DataConfigFactory):
         )
 
 @dataclasses.dataclass(frozen=True)
+class LeRobotLiberoDataConfig_dual(DataConfigFactory):
+    """
+    This config is used to configure transforms that are applied at various parts of the data pipeline.
+    For your own dataset, you can copy this class and modify the transforms to match your dataset based on the
+    comments below.
+    数据转换，修改为自己的数据集
+    """
+    # 离散化?
+    # True:需要；False:不需要
+    extra_delta_transform: bool = True
+
+    @override
+    def create(self, assets_dirs: pathlib.Path, model_config: _model.BaseModelConfig) -> DataConfig:
+        # The repack transform is *only* applied to the data coming from the dataset,
+        # and *not* during inference. We can use it to make inputs from the dataset look
+        # as close as possible to those coming from the inference environment (e.g. match the keys).
+        # Below, we match the keys in the dataset (which we defined in the data conversion script) to
+        # the keys we use in our inference pipeline (defined in the inference script for libero).
+        # For your own dataset, first figure out what keys your environment passes to the policy server
+        # and then modify the mappings below so your dataset's keys get matched to those target keys.
+        # The repack transform simply remaps key names here.
+        # repack_transform:重新映射键名。
+        """
+        repack_transform = _transforms.Group(
+            inputs=[
+                _transforms.RepackTransform(
+                    {
+                        "observation/image": "image",
+                        "observation/wrist_image": "wrist_image",
+                        "observation/state": "state",
+                        "actions": "actions",
+                        "prompt": "prompt",
+                    }
+                )
+            ]
+        )
+        """
+        repack_transform = _transforms.Group(
+            inputs=[
+                _transforms.RepackTransform(
+                    {
+                        "head_image": "head_image",
+                        "left_wrist_image": "left_wrist_image",
+                        "right_wrist_image": "right_wrist_image",
+                        "state": "state",
+                        "actions": "actions",
+                        "task": "prompt",
+                    }
+                )
+            ]
+        )
+
+        # The data transforms are applied to the data coming from the dataset *and* during inference.
+        # Below, we define the transforms for data going into the model (``inputs``) and the transforms
+        # for data coming out of the model (``outputs``) (the latter is only used during inference).
+        # We defined these transforms in `libero_policy.py`. You can check the detailed comments there for
+        # how to modify the transforms to match your dataset. Once you created your own transforms, you can
+        # replace the transforms below with your own.
+        # 模型 输入格式、输出格式  待修改
+        data_transforms = _transforms.Group(
+            inputs=[libero_policy.LiberoInputs(model_type=model_config.model_type)],
+            outputs=[libero_policy.LiberoOutputs()],
+        )
+
+        # One additional data transform: pi0 models are trained on delta actions (relative to the first
+        # state in each action chunk). IF your data has ``absolute`` actions (e.g. target joint angles)
+        # you can uncomment the following line to convert the actions to delta actions. The only exception
+        # is for the gripper actions which are always absolute.
+        # In the example below, we would apply the delta conversion to the first 6 actions (joints) and
+        # leave the 7th action (gripper) unchanged, i.e. absolute.
+        # In Libero, the raw actions in the dataset are already delta actions, so we *do not* need to
+        # apply a separate delta conversion (that's why it's commented out). Choose whether to apply this
+        # transform based on whether your dataset uses ``absolute`` or ``delta`` actions out of the box.
+        # pi0模型是在相对动作(抓手动作总是绝对的)上训练的（相对于第一个）
+        # pi0模型训练[j1,j2,j3,...,jn,gripper],j*为相对，gripper为绝对
+        # 如果数据有“绝对”动作（例如目标关节角度），取消下面一行的注释，将动作转换为相对动作。
+        # LIBERO already represents actions as deltas, but we have some old Pi0 checkpoints that are trained with this
+        # extra delta transform.
+        if self.extra_delta_transform:
+            # 前6个动作（关节）应用增量转换，并保持第7个动作（抓手）不变
+            delta_action_mask = _transforms.make_bool_mask(12, -2)
+            # delta_action_mask = (True, True, True, True, True, True, False)
+            data_transforms = data_transforms.push(
+                inputs=[_transforms.DeltaActions(delta_action_mask)],
+                outputs=[_transforms.AbsoluteActions(delta_action_mask)],
+            )
+            '''# DeltaActions
+            # state= [s0, s1, s2, s3, s4, s5, s6, ...]  # 假设有更多维度
+            # actions = [a0, a1, a2, a3, a4, a5, a6, a7, ...]  # 动作维度 ≥ 7
+            # 将位置为True变为增量
+            # actions[0] = a0 - s0  # 因为 mask[0] = True
+            # actions[1] = a1 - s1  # 因为 mask[1] = True
+            # actions[2] = a2 - s2  # 因为 mask[2] = True
+            # actions[3] = a3 - s3  # 因为 mask[3] = True
+            # actions[4] = a4 - s4  # 因为 mask[4] = True
+            # actions[5] = a5 - s5  # 因为 mask[5] = True
+            # actions[6] = a6  # 保持不变，因为 mask[6] = False
+            # actions[7] = a7  # 保持不变，因为 dims=7，只处理前7维
+            # AbsoluteActions
+            # 将True部分变为绝对
+            # actions[0] = a0 + s0  # 恢复原始 a0
+            # actions[1] = a1 + s1  # 恢复原始 a1
+            # actions[2] = a2 + s2  # 恢复原始 a2
+            # actions[3] = a3 + s3  # 恢复原始 a3
+            # actions[4] = a4 + s4  # 恢复原始 a4
+            # actions[5] = a5 + s5  # 恢复原始 a5
+            # actions[6] = a6  # 保持不变
+            # actions[7] = a7  # 保持不变'''
+
+        # Model transforms include things like tokenizing the prompt and action targets
+        # You do not need to change anything here for your own dataset.
+        model_transforms = ModelTransformFactory()(model_config)
+
+        # We return all data transforms for training and inference. No need to change anything here.
+        return dataclasses.replace(
+            self.create_base_config(assets_dirs, model_config),
+            repack_transforms=repack_transform,
+            data_transforms=data_transforms,
+            model_transforms=model_transforms,
+        )
+
+@dataclasses.dataclass(frozen=True)
 class TrainConfig:
     # Name of the config. Must be unique. Will be used to reference this config.
     name: tyro.conf.Suppress[str]
@@ -410,22 +532,45 @@ class TrainConfig:
 
 # Use `get_config` if you need to get a config by name in your code.
 _CONFIGS = [
+    # lora微调
+    TrainConfig(
+        name="piper_libero",
+        # 1. 修改模型配置，启用 LoRA 变体
+        model=pi0_config.Pi0Config(
+            pi05=True,
+            paligemma_variant="gemma_2b_lora",
+            action_expert_variant="gemma_300m_lora"
+        ),
+        data=LeRobotLiberoDataConfig(
+            repo_id="mazhipeng/piper_dataset",
+            base_config=DataConfig(prompt_from_task=True),
+            extra_delta_transform=True,
+        ),
+        # 2. 设置冻结过滤器（LoRA 必需）
+        freeze_filter=pi0_config.Pi0Config(
+            pi05=True,
+            paligemma_variant="gemma_2b_lora",
+            action_expert_variant="gemma_300m_lora"
+        ).get_freeze_filter(),
+
+        # 3. LoRA 建议关闭 EMA
+        ema_decay=None,
+
+        batch_size=4,  # 在 LoRA 模式下，4 应该可以跑通，甚至可以尝试 8 或 16
+        weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi05_base/params"),
+        num_train_steps=30_000,
+    ),
     #
     # Fine-tuning Libero configs.
-    #
-    # These train configs define the hyperparameters for fine-tuning the base model on your own dataset.
-    # They are used to define key elements like the dataset you are training on, the base checkpoint you
-    # are using, and other hyperparameters like how many training steps to run or what learning rate to use.
-    # For your own dataset, you can copy this class and modify the dataset name, and data transforms based on
-    # the comments below.
+    # 全量微调
     TrainConfig(
         # Change the name to reflect your model and dataset.
         # 使用"get_config(piper_libero)"获取配置"TrainConfig"，
-        name="piper_libero",
+        name="piper_liberosadasd",
         # Here you define the model config -- In this example we use pi0 as the model
         # architecture and perform *full* finetuning. in the examples below we show how to modify
         # this to perform *low-memory* (LORA) finetuning and use pi0-FAST as an alternative architecture.
-        model=pi0_config.Pi0Config(),#使用pi0作为基础模型
+        model=pi0_config.Pi0Config(),  # 使用pi0作为基础模型
         # Here you define the dataset you are training on. In this example we use the Libero
         # dataset. For your own dataset, you can change the repo_id to point to your dataset.
         # Also modify the DataConfig to use the new config you made for your dataset above.
@@ -437,19 +582,49 @@ _CONFIGS = [
                 # This flag determines whether we load the prompt (i.e. the task instruction) from the
                 # ``task`` field in the LeRobot dataset. If set to True, the prompt will show up in
                 # a field called ``prompt`` in the input dict. The recommended setting is True.
-                prompt_from_task=True,#是否加载任务指令task
+                prompt_from_task=True,  # 是否加载任务指令task
             ),
             extra_delta_transform=True,
         ),
         # Here you define which pre-trained checkpoint you want to load to initialize the model.
         # This should match the model config you chose above -- i.e. in this case we use the pi0 base model.
         # 加载哪个模型?待修改
-        weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi0_base/params"),
+        # weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi0_base/params"),
+        weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi05_base"),
         # Below you can define other hyperparameters like the learning rate, number of training steps, etc.
         # Check the base TrainConfig class for a full list of available hyperparameters.
         # 定义其他超参数，如学习率，训练步骤数
         num_train_steps=30_000,
     ),
+    # lora双臂微调
+    TrainConfig(
+            name="piper_dual",
+            # 1. 修改模型配置，启用 LoRA 变体
+            model=pi0_config.Pi0Config(
+                pi05=True,
+                paligemma_variant="gemma_2b_lora",
+                action_expert_variant="gemma_300m_lora"
+            ),
+            data=LeRobotLiberoDataConfig_dual(
+                repo_id="mazhipeng/piper_dataset_dual",
+                base_config=DataConfig(prompt_from_task=True),
+                extra_delta_transform=True,
+            ),
+            # 2. 设置冻结过滤器（LoRA 必需）
+            freeze_filter=pi0_config.Pi0Config(
+                pi05=True,
+                paligemma_variant="gemma_2b_lora",
+                action_expert_variant="gemma_300m_lora"
+            ).get_freeze_filter(),
+
+            # 3. LoRA 建议关闭 EMA
+            ema_decay=None,
+
+            batch_size=4,  # 在 LoRA 模式下，4 应该可以跑通，甚至可以尝试 8 或 16
+            weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi05_base/params"),
+            num_train_steps=30_000,
+        ),
+
     TrainConfig(
         name="pi0_libero_low_mem_finetune",
         # Here is an example of loading a pi0 model for LoRA fine-tuning.
