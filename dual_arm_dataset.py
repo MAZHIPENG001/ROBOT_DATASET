@@ -31,6 +31,9 @@ def main():
     piper_r = robot_piper('can1')
     piper_r.ConnectPort()
     piper_r.disable_arm()
+
+    # 加载舵机
+    # ls / dev / ttyUSB*
     servo_l=Servo(port='/dev/ttyUSB')
     servo_r=Servo(port='/dev/ttyUSB')
     # 加载相机
