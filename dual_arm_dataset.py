@@ -8,6 +8,7 @@ from device.robot import robot_piper
 from device.realsense_camera import RealSenseCamera
 import numpy as np
 import os
+from device.servo import Servo
 
 PROXY_URL = "http://127.0.0.1:7897"
 os.environ['http_proxy'] = PROXY_URL
@@ -30,6 +31,8 @@ def main():
     piper_r = robot_piper('can1')
     piper_r.ConnectPort()
     piper_r.disable_arm()
+    servo_l=Servo(port='/dev/ttyUSB')
+    servo_r=Servo(port='/dev/ttyUSB')
     # 加载相机
     camera1 = RealSenseCamera(width=640, height=480,serial_number="233622070932")
     camera2 = RealSenseCamera(width=640, height=480,serial_number="938422074612")
@@ -77,13 +80,18 @@ def main():
             prev_actions = actions.copy()
             # # 跟随
             '''
-            等待双臂遥操作设备--待完善
-            
-            # piper_l.move_a(*joints)
-            # piper_l.gripper(gripper)
-            # piper_r.move_a(*joints)
-            # piper_r.gripper(gripper)
+            双臂遥操作设备
             '''
+            servo_l_joints = servo_l.read_all_angles()
+            *map_joints_l, map_gripper_l = servo_l.map_angle_piper(val=servo_l_joints)
+            servo_r_joints = servo_r.read_all_angles()
+            *map_joints_r, map_gripper_r = servo_r.map_angle_piper(val=servo_r_joints)
+
+            piper_l.move_a(*map_joints_l)
+            piper_l.gripper(map_gripper_l)
+            piper_r.move_a(*map_joints_r)
+            piper_r.gripper(map_gripper_r)
+
             # 相机
             image_head, _ = camera1.get_images()
             image_wrist_left, _ = camera2.get_images()
