@@ -2,9 +2,10 @@
 import serial
 import time
 class Servo():
-    def __init__(self,port='/dev/ttyUSB',baudrate=115200,num_joints=7):
+    def __init__(self,port='/dev/ttyUSB',baudrate=115200,num_joints=7,zero_current=True):
         self.port=port
         self.baudrate=baudrate
+        self.zero_current=zero_current
         self.ser = serial.Serial(self.port, self.baudrate, timeout=0.5)
         print(f"✅ 成功连接舵机控制板 (端口: {self.port})")
         self.in_min = [500, 500, 500, 500, 500, 500, 500]
@@ -26,8 +27,13 @@ class Servo():
 
     def servo_init(self):
         print("⚙️ 正在初始化机械臂...")
-        # self.zero_set()
-        self.reset()
+        if self.zero_current:
+            # 设置完成后，后续运行程序将zero_current设置为Flase
+            # 当前位置设置为零点
+            self.zero_set()
+        # else:
+        #     # 出厂位置设置为零点
+        #     self.reset()
         self.torque_off()
         time.sleep(0.1)
         print("✅ 初始化完成！机械臂已失能。")
