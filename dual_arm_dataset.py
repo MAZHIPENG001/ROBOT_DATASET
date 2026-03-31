@@ -110,12 +110,17 @@ def main():
             cv2.imshow('RealSense - Color', color_image_combine)
             cv2.waitKey(1)
 
-            image_head = parase_image(image_head)
-            image_wrist_left = parase_image(image_wrist_left)
-            image_wrist_right = parase_image(image_wrist_right)
+            image_head_rgb = cv2.cvtColor(image_head, cv2.COLOR_BGR2RGB)
+            image_wrist_left_rgb = cv2.cvtColor(image_wrist_left, cv2.COLOR_BGR2RGB)
+            image_wrist_right_rgb = cv2.cvtColor(image_wrist_right, cv2.COLOR_BGR2RGB)
+
+            image_head_parsed = parase_image(image_head_rgb)
+            image_wrist_left_parsed = parase_image(image_wrist_left_rgb)
+            image_wrist_right_parsed = parase_image(image_wrist_right_rgb)
             # 缓存数据
             if is_recording:
-                ld.keep_record(image_head,image_wrist_left,image_wrist_right,state,actions,task)
+                ld.keep_record(image_head_parsed, image_wrist_left_parsed,
+                               image_wrist_right_parsed, state, actions, task)
                 # ld.keeping_record()
                 idx+=1
 

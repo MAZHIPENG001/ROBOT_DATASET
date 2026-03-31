@@ -83,11 +83,16 @@ def main():
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             cv2.imshow('RealSense - Color', color_image_combine)
             cv2.waitKey(1)
-            image_head = parase_image(image_head)
-            image_wrist = parase_image(image_wrist)
+
+            image_head_rgb = cv2.cvtColor(image_head, cv2.COLOR_BGR2RGB)
+            image_wrist_rgb = cv2.cvtColor(image_wrist, cv2.COLOR_BGR2RGB)
+
+            image_head_parsed = parase_image(image_head_rgb)
+            image_wrist_parsed = parase_image(image_wrist_rgb)
+
             # 缓存数据
             if is_recording:
-                ld.keep_record(image_head,image_wrist,state,actions,task)
+                ld.keep_record(image_head_parsed, image_wrist_parsed, state, actions, task)
                 # ld.keeping_record()
                 idx+=1
 
