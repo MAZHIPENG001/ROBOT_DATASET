@@ -18,6 +18,7 @@ Backspace:删除当前缓存数据
 ```
 
 增加双臂训练部分，文件不解释（与单臂类似），使用方法见文末
+双臂结构：https://github.com/MINT-SJTU/LeRobot-Anything-U-Arm
 
 # 单臂
 ## Github仓库
