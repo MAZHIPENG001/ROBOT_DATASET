@@ -156,6 +156,24 @@ class Servo():
                 servo_angle.append(None)
 
         return servo_angle
+    def control_all_angles(self, servo_angles, duration=1000):
+        """
+            遍历七维列表并发送舵机指令
+            :param servo_angles: 长度为 7 的列表，如 [1500, 1200, 1800, ...]
+            :param duration: 运动执行的时间/力度 T 参数，默认 1000
+            """
+        responses = []
+
+        for index, angle in enumerate(servo_angles):
+            # 格式化指令：
+            # {:03d} -> ID 补零至3位 (000, 001...)
+            # {:04d} -> 角度通常为4位 (1500)
+            # T{:d}  -> 时间参数
+            command = f"#{index:03d}P{int(angle):04d}T{duration}!"
+
+            # 调用你定义的发送函数
+            # 如果是连续控制，为了效率，通常将 expect_response 设为 False
+            self.send_command(command, expect_response=False)
 
     def map_angle_piper(self, val):
         val = np.array(val)
@@ -177,18 +195,23 @@ class Servo():
         return safe_val.tolist()
 
 if __name__ == "__main__":
+    import math
+
     servo = Servo(port='/dev/ttyUSB1',num_joints=7,zero_current=False)
     # servo.torque_on()
+
+    start_time = time.time()
+    frequency = 0.01  # 频率，数值越大变化越快
     while True:
-        # servo.send_command("#000P1000T1000!")
-        # servo.send_command("#001P1000T1000!")
-        # servo.send_command("#002P1000T1000!")
-        # servo.send_command("#003P1000T1000!")
-        # servo.send_command("#004P1000T1000!")
-        # servo.send_command("#005P1000T1000!")
-        # servo.send_command("#006P0500T1000!")
+        t = time.time() - start_time
+        # 利用正弦函数在 -1 到 1 之间波动的特性
+        # 映射到 500 到 2500
+        val = 1500 + 1000 * math.sin(2 * math.pi * frequency * t)
+        servo_angles = [int(val)] * 7
+        servo.control_all_angles(servo_angles)
+
         t0=time.time()
         messages=servo.read_all_angles()
         print(f"spend time: \33[92m{time.time() - t0}\33[0m")
         print(messages)
-        time.sleep(1)
+        # time.sleep(1)
