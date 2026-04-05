@@ -33,14 +33,14 @@ class Servo():
         self.read_version()
     def servo_init(self):
         print("⚙️ 正在初始化机械臂...")
-        if self.zero_current:
-            # 当前位置设置为零点
-            self.zero_set()
-        else:
-            # 出厂位置设置为零点
-            self.reset()
+        # if self.zero_current:
+        #     # 当前位置设置为零点
+        #     self.zero_set()
+        # else:
+        #     # 出厂位置设置为零点
+        #     self.reset()
         self.torque_off()
-        print("✅ 初始化完成！机械臂已失能。")
+
 
     def id_set(self, old_id, new_id):
         """
@@ -99,21 +99,27 @@ class Servo():
 
         return response.decode('ascii', errors='ignore')
 
-    def torque_off(self, servo_id=255):
+    def torque_off(self):
         """
         释放扭力/卸载 (表格序号 5)
         卸载后可以用手掰动机械臂。默认 ID=255 广播全体卸载。
         """
-        command = f"#{servo_id:03d}PULM!"
-        self.send_command(command)
+        for id in range(self.num_joints):
+            command = f"#{id:03d}PULM!"
+            self.send_command(command)
+        print("机械臂已失能。")
         time.sleep(1)
-    def torque_on(self, servo_id=255):
-        command = f"#{servo_id:03d}PULR!"
-        self.send_command(command)
+    def torque_on(self):
+        for id in range(self.num_joints):
+            command = f"#{id:03d}PULR!"
+            self.send_command(command)
+        print("机械臂已使能")
+        time.sleep(1)
 
     def zero_set(self, servo_id=255):
-        command = f"#{servo_id:03d}PSCK!"
-        self.send_command(command)
+        for id in range(self.num_joints):
+            command = f"#{id:03d}PSCK!"
+            self.send_command(command)
     def reset(self):
         for id in range(self.num_joints):
             self.send_command(f"#{id:03d}PCLE!")
@@ -162,8 +168,6 @@ class Servo():
             :param servo_angles: 长度为 7 的列表，如 [1500, 1200, 1800, ...]
             :param duration: 运动执行的时间/力度 T 参数，默认 1000
             """
-        responses = []
-
         for index, angle in enumerate(servo_angles):
             # 格式化指令：
             # {:03d} -> ID 补零至3位 (000, 001...)
@@ -197,21 +201,17 @@ class Servo():
 if __name__ == "__main__":
     import math
 
-    servo = Servo(port='/dev/ttyUSB1',num_joints=7,zero_current=False)
-    # servo.torque_on()
-
+    servo = Servo(port='/dev/ttyUSB0',num_joints=7,zero_current=False)
+    servo.torque_off()
     start_time = time.time()
-    frequency = 0.01  # 频率，数值越大变化越快
+    frequency = 0.1  # 频率，数值越大变化越快
     while True:
         t = time.time() - start_time
-        # 利用正弦函数在 -1 到 1 之间波动的特性
-        # 映射到 500 到 2500
-        val = 1500 + 1000 * math.sin(2 * math.pi * frequency * t)
-        servo_angles = [int(val)] * 7
-        servo.control_all_angles(servo_angles)
-
-        t0=time.time()
-        messages=servo.read_all_angles()
-        print(f"spend time: \33[92m{time.time() - t0}\33[0m")
-        print(messages)
-        # time.sleep(1)
+    #     # 利用正弦函数在 -1 到 1 之间波动的特性
+    #     # 映射到 500 到 2500
+    #     val = 1500 + 300 * math.sin(2 * math.pi * frequency * t)
+    #     servo_angles = [int(val)] * 7
+    #     servo.control_all_angles(servo_angles)
+        time.sleep(0.5)
+        servo_angles = servo.read_all_angles()
+        print(servo_angles)
