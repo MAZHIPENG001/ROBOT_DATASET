@@ -4,15 +4,16 @@ import time
 import numpy as np
 
 class Servo():
-    def __init__(self,port='/dev/ttyUSB0',baudrate=115200,num_joints=7,zero_current=True):
+    def __init__(self,port='/dev/ttyUSB0',baudrate=115200,num_joints=7,in_min=[0] * 7,in_max=[0] * 7):
         self.port=port
         self.num_joints = num_joints
         self.baudrate=baudrate
-        self.zero_current=zero_current
         self.ser = serial.Serial(self.port, self.baudrate, timeout=0.5)
         print(f"✅ 成功连接舵机控制板 (端口: {self.port})")
-        self.in_min =   [2150   , 780   , 800       , 970       , 1400      , 1900      , 1600]#j4=860
-        self.in_max =   [750    , 2040  , 1500      , 2080      , 2400      , 1100      , 1300]
+
+        self.in_min = in_min
+        self.in_max = in_max
+
         self.out_min =  [90000  , 100   , 0         , -100000   , 70000     , 90000     , 0]
         self.out_max =  [-90000 , 180000, -170000   , 100000    , -78000    , -90000    , 70000]
         ''''
@@ -31,16 +32,10 @@ class Servo():
         # self.out_max = [150000    , 180000    , 0         , 100000    , 70000     , 120000    , 70000]
         self.servo_init()
         self.read_version()
+
     def servo_init(self):
         print("⚙️ 正在初始化机械臂...")
-        # if self.zero_current:
-        #     # 当前位置设置为零点
-        #     self.zero_set()
-        # else:
-        #     # 出厂位置设置为零点
-        #     self.reset()
         self.torque_off()
-
 
     def id_set(self, old_id, new_id):
         """
@@ -116,10 +111,11 @@ class Servo():
         print("机械臂已使能")
         time.sleep(1)
 
-    def zero_set(self, servo_id=255):
+    def zero_set(self):
         for id in range(self.num_joints):
             command = f"#{id:03d}PSCK!"
-            self.send_command(command)
+            res=self.send_command(command)
+            print(res)
     def reset(self):
         for id in range(self.num_joints):
             self.send_command(f"#{id:03d}PCLE!")
@@ -201,17 +197,20 @@ class Servo():
 if __name__ == "__main__":
     import math
 
-    servo = Servo(port='/dev/ttyUSB0',num_joints=7,zero_current=False)
-    servo.torque_off()
+    # 红色
+    in_min_red = [2200,870,1480,800,1100,1900,800]
+    in_max_red = [790,2240,2000,2000,2100,1000,500]
+    # 橙色
+    in_min_orange = [2179,1059,880,1000,1300,1980,1580]
+    in_max_orange = [776,2321,2000,1900,2500,1020,1280]
+    servo = Servo(port='/dev/ttyUSB0',num_joints=7,in_min=in_min_red,in_max=in_max_red)
     start_time = time.time()
     frequency = 0.1  # 频率，数值越大变化越快
     while True:
-        t = time.time() - start_time
-    #     # 利用正弦函数在 -1 到 1 之间波动的特性
-    #     # 映射到 500 到 2500
-    #     val = 1500 + 300 * math.sin(2 * math.pi * frequency * t)
-    #     servo_angles = [int(val)] * 7
-    #     servo.control_all_angles(servo_angles)
-        time.sleep(0.5)
         servo_angles = servo.read_all_angles()
         print(servo_angles)
+        time.sleep(0.2)
+        t = time.time() - start_time
+        val = 1500 #+ 400 * math.sin(2 * math.pi * frequency * t)
+        servo_angles = [int(val)] * 7
+        # servo.control_all_angles(servo_angles)
